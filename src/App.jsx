@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import './App.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -10,6 +11,7 @@ import Sponsors from './components/Sponsors'
 import Reel from './components/Reel'
 import Footer from './components/Footer'
 import SchedulePage from './components/SchedulePage'
+import EventDetails from './components/EventDetails'
 
 function HomePage({ scrollToRefs, scrollToSection, isScrolled }) {
   return (
@@ -39,6 +41,7 @@ function HomePage({ scrollToRefs, scrollToSection, isScrolled }) {
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   const heroRef = useRef(null);
   const aboutRef = useRef(null);
@@ -65,9 +68,9 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
-        <Routes>
+    <div className="min-h-screen flex flex-col">
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
           <Route
             path="/"
             element={
@@ -79,9 +82,10 @@ function App() {
             }
           />
           <Route path="/schedule" element={<SchedulePage />} />
+          <Route path="/events/:eventName" element={<EventDetails />} />
         </Routes>
-      </div>
-    </BrowserRouter>
+      </AnimatePresence>
+    </div>
   )
 }
 
