@@ -585,3 +585,51 @@ footer {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.4);
 }
+
+/* ── Events Section – Scrollbar Hide ───────────────── */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Marquee Animation ────────────────────────────── */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 30s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Poster Float Animation ───────────────────────── */
+@keyframes posterFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.poster-float {
+  animation: posterFloat 4s ease-in-out infinite;
+}
