@@ -47,8 +47,6 @@ const EventCard = React.memo(({ event, isActive }) => {
             src={event.poster}
             alt={event.name}
             className="w-full h-full object-cover"
-            loading="lazy"
-            decoding="async"
           />
 
           {/* Hover overlay — always in DOM, toggled via opacity */}
@@ -102,7 +100,6 @@ const EventCard = React.memo(({ event, isActive }) => {
         <h3
           className="text-lg md:text-xl font-black tracking-wider uppercase"
           style={{
-            fontFamily: "'VerminVibes', 'Orbitron', sans-serif",
             color: isActive ? '#fff' : '#666',
           }}
         >
@@ -197,11 +194,10 @@ const Event = forwardRef((props, ref) => {
       {/* Header */}
       <div className="relative z-10 text-center mb-12 md:mb-16 px-4">
         <p className="text-[10px] md:text-xs font-semibold tracking-[0.4em] text-white/30 uppercase mb-4">
-          Department of Computer Engineering · DYP DPU · Presents
+          Acunetix Presents
         </p>
         <h2
           className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-wider"
-          style={{ fontFamily: "'VerminVibes', 'Orbitron', sans-serif" }}
         >
           <span className="text-white">Choose Your </span>
           <span
@@ -291,7 +287,6 @@ const Event = forwardRef((props, ref) => {
         <p
           className="text-lg md:text-2xl font-black tracking-[0.3em] uppercase"
           style={{
-            fontFamily: "'VerminVibes', 'Orbitron', sans-serif",
             transition: 'color 0.4s ease',
             color: theme?.primary || '#ff4500',
           }}

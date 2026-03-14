@@ -13,7 +13,7 @@ const Schedule = forwardRef((props, ref) => {
 
     return (
         <section ref={ref} id="events" className="events-section">
-            <h2 className="events-heading">Schedule</h2>
+            <h2 className="events-heading text-2xl md:text-7xl lg:text-8xl">Schedule</h2>
 
             <div className="stacked-cards-container">
                 {events.map((evt, idx) => (
@@ -25,12 +25,12 @@ const Schedule = forwardRef((props, ref) => {
                         <CometCard className="stacked-comet-card">
                             <div
                                 className="stacked-card-content"
-                                onClick={() => navigate('/schedule')}
+                                onClick={() => navigate(`/schedule/${evt.id}`)}
                             >
                                 <span className="stacked-card-number">0{evt.id}</span>
                                 <h3 className="stacked-card-title">{evt.title}</h3>
                                 <p className="stacked-card-subtitle">{evt.subtitle}</p>
-                                <span className="event-card-cta">View Schedule →</span>
+                                <span className="event-card-cta 5xl">View Schedule →</span>
                             </div>
                         </CometCard>
                     </div>
