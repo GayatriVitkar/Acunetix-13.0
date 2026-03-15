@@ -9,6 +9,11 @@ import Footer from './Footer';
 import FlickeringGrid from './FlickeringGrid';
 import MatrixRain from './MatrixRain';
 import LetterGlitch from './LetterGlitch';
+import InteractiveParticleField from './InteractiveParticleField';
+import FloatingLines from './FloatingLines';
+import BugBountyBackground from './BugBountyBackground';
+import CtrlAltEliteBackground from './CtrlAltEliteBackground';
+import ShapeGrid from './ShapeGrid';
 
 /* ── Particle Canvas — dramatic floating particles ── */
 const ParticleCanvas = ({ color }) => {
@@ -165,18 +170,19 @@ const EventDetails = () => {
     const invertedPrimary = invertHex(theme.primary);
 
 
-    // GameStorm custom background and glitch foreground (React+Tailwind only)
+    // GameStorm custom background
     const isGameStorm = id === 'gamestorm';
+
     return (
         <motion.div
-            className="min-h-screen relative flex flex-col overflow-x-hidden"
-            style={isGameStorm ? { background: `url(${gamestormBg}) center/cover, ${theme.gradient}` } : { background: theme.gradient }}
+            className="min-h-screen relative flex flex-col overflow-x-hidden bg-black"
+            style={isGameStorm ? { background: `url(${gamestormBg}) center/cover, ${theme.gradient}` } : (id === 'treasure-trove' || id === 'dpl' ? { background: '#000' } : { background: theme.gradient })}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
         >
-            {/* GameStorm: No glitch effect, just normal background */}
+            {/* GameStorm: normal background image */}
             {isGameStorm && (
                 <div className="pointer-events-none absolute inset-0 z-0">
                     <div
@@ -190,85 +196,122 @@ const EventDetails = () => {
             {/* ...existing code... */}
 
 
-                        {/* Matrix rain for build-a-thon and codeoflies, FlickeringGrid for ctrlaltelite, all with bg-slate-900/90 overlay */}
-                        {(id === 'build-a-thon' || id === 'codeoflies') && (
-                                <>
-                                    <MatrixRain color={theme.primary} />
-                                      <div className="fixed inset-0 w-full h-full z-0 pointer-events-none bg-slate-900" />
-                                      <div className="fixed inset-0 w-full h-full z-0 pointer-events-none" style={{ background: 'rgba(0,0,0,0.85)' }} />
-                                </>
-                        )}
-                        {id === 'ctrlaltelite' && (
-                                <>
-                                    <FlickeringGrid color={theme.primary} className="z-0" />
-                                    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none" />
-                                </>
-                        )}
+            {/* Matrix rain for build-a-thon and codeoflies, FlickeringGrid for ctrlaltelite, all with bg-slate-900/90 overlay */}
+            {(id === 'build-a-thon' || id === 'codeoflies') && (
+                <>
+                    <MatrixRain color={theme.primary} />
+                    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none bg-slate-900" />
+                    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none" style={{ background: 'rgba(0,0,0,0.85)' }} />
+                </>
+            )}
+            {id === 'ctrlaltelite' && (
+                <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+                    <CtrlAltEliteBackground />
+                </div>
+            )}
 
-                        {/* LetterGlitch background for braniac and bugbounty, with fixed glitch colors and a dark overlay for readability */}
-                        {(id === 'brainiac' || id === 'bugbounty') && (
-                                <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
-                                    <LetterGlitch
-                                        glitchColors={['#ff3333', '#33ff33', '#3399ff']}
-                                        glitchSpeed={50}
-                                        centerVignette={true}
-                                        outerVignette={false}
-                                        smooth={true}
-                                        style={{ background: 'transparent' }}
-                                    />
-                                    <div className="absolute inset-0 bg-slate-900/70" style={{ zIndex: 1 }} />
-                                </div>
-                        )}
+            {/* Custom Icon Matrix background for bugbounty */}
+            {id === 'bugbounty' && (
+                <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+                    <BugBountyBackground />
+                </div>
+            )}
+
+            {/* Interactive Particle Field for brainiac */}
+            {id === 'brainiac' && (
+                <div className="fixed inset-0 w-full h-full z-0">
+                    <InteractiveParticleField />
+                </div>
+            )}
+
+            {/* Floating Lines for treasure-trove */}
+            {id === 'treasure-trove' && (
+                <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+                    <div style={{ width: '100%', height: '100%', position: 'absolute' }} className="pointer-events-auto">
+                        <FloatingLines
+                            linesGradient={['#fff5cc', theme.primary, theme.secondary, theme.primary, '#fff5cc']}
+                            enabledWaves={["top", "bottom", "middle"]}
+                            // Array - specify line count per wave; Number - same count for all waves
+                            lineCount={5}
+                            // Array - specify line distance per wave; Number - same distance for all waves
+                            lineDistance={14.5}
+                            bendRadius={13.5}
+                            bendStrength={0}
+                            interactive={true}
+                            parallax={true}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* ShapeGrid Animation for DPL */}
+            {id === 'dpl' && (
+                <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+                    <div style={{ width: '100%', height: '100%', position: 'absolute' }} className="pointer-events-auto">
+                        <ShapeGrid
+                            speed={0.44}
+                            squareSize={40}
+                            direction="left" // up, down, left, right, diagonal
+                            borderColor="#353317" // yellowish dark brown hue fitting DPL theme
+                            hoverFillColor="#e8d020" // bright yellow DPL primary
+                            shape="hexagon" // hexagon fits cricket/sports well
+                            hoverTrailAmount={0} // number of trailing hovered shapes (0 = no trail)
+                        />
+                    </div>
+                </div>
+            )}
 
             {/* Large ambient glows — very visible */}
-            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                {/* Top-right glow */}
-                <div
-                    className="absolute rounded-full"
-                    style={{
-                        top: '-15%',
-                        right: '-10%',
-                        width: '700px',
-                        height: '700px',
-                        background: theme.primary,
-                        opacity: 0.12,
-                        filter: 'blur(120px)',
-                    }}
-                />
-                {/* Bottom-left glow */}
-                <div
-                    className="absolute rounded-full"
-                    style={{
-                        bottom: '-10%',
-                        left: '-10%',
-                        width: '500px',
-                        height: '500px',
-                        background: theme.primary,
-                        opacity: 0.08,
-                        filter: 'blur(100px)',
-                    }}
-                />
-                {/* Center glow */}
-                <div
-                    className="absolute rounded-full"
-                    style={{
-                        top: '30%',
-                        left: '40%',
-                        width: '600px',
-                        height: '600px',
-                        background: theme.primary,
-                        opacity: 0.05,
-                        filter: 'blur(150px)',
-                    }}
-                />
-                {/* Vignette overlay */}
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%)',
-                    }}
-                />
-            </div>
+            {(id !== 'treasure-trove' && id !== 'dpl') && (
+                <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                    {/* Top-right glow */}
+                    <div
+                        className="absolute rounded-full"
+                        style={{
+                            top: '-15%',
+                            right: '-10%',
+                            width: '700px',
+                            height: '700px',
+                            background: theme.primary,
+                            opacity: 0.12,
+                            filter: 'blur(120px)',
+                        }}
+                    />
+                    {/* Bottom-left glow */}
+                    <div
+                        className="absolute rounded-full"
+                        style={{
+                            bottom: '-10%',
+                            left: '-10%',
+                            width: '500px',
+                            height: '500px',
+                            background: theme.primary,
+                            opacity: 0.08,
+                            filter: 'blur(100px)',
+                        }}
+                    />
+                    {/* Center glow */}
+                    <div
+                        className="absolute rounded-full"
+                        style={{
+                            top: '30%',
+                            left: '40%',
+                            width: '600px',
+                            height: '600px',
+                            background: theme.primary,
+                            opacity: 0.05,
+                            filter: 'blur(150px)',
+                        }}
+                    />
+                    {/* Vignette overlay */}
+                    <div
+                        className="absolute inset-0"
+                        style={{
+                            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%)',
+                        }}
+                    />
+                </div>
+            )}
 
             {/* Page content */}
             <div className="relative z-10 grow pt-24 pb-32">
@@ -294,8 +337,8 @@ const EventDetails = () => {
                 </motion.div>
 
                 {/* Main layout */}
-                <div className="px-6 md:px-12 lg:px-20 mt-8 md:mt-12">
-                    <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start max-w-350 mx-auto">
+                <div className="px-4 sm:px-6 md:px-12 lg:px-20 mt-8 md:mt-12 overflow-hidden">
+                    <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start w-full max-w-7xl mx-auto">
                         {/* Mobile poster (top) */}
                         <motion.div
                             className="lg:hidden w-full flex justify-center"
@@ -323,9 +366,9 @@ const EventDetails = () => {
                             transition={{ duration: 0.6, delay: 0.3 }}
                         >
                             {/* Category badge */}
-                            <div className="mb-4">
+                            <div className="mb-4 flex flex-wrap">
                                 <span
-                                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-[0.15em] uppercase border"
+                                    className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 text-[10px] md:text-xs font-semibold tracking-[0.15em] uppercase border"
                                     style={{
                                         borderColor: `${theme.primary}50`,
                                         color: theme.primary,
@@ -339,7 +382,7 @@ const EventDetails = () => {
 
                             {/* Event name */}
                             <h1
-                                className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black uppercase leading-none mb-4"
+                                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black uppercase leading-tight md:leading-none mb-4 break-words"
                                 style={{
                                     fontFamily: "'VerminVibes', 'Orbitron', monospace",
                                     color: '#fff',
@@ -367,7 +410,7 @@ const EventDetails = () => {
                             />
 
                             {/* Description */}
-                            <p className="text-white/60 text-sm md:text-base leading-relaxed mb-8 max-w-xl font-mono">
+                            <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6 md:mb-8 font-mono break-words">
                                 {event.description}
                             </p>
 
@@ -388,14 +431,14 @@ const EventDetails = () => {
                                                 boxShadow: `0 0 10px ${theme.primary}80`,
                                             }}
                                         />
-                                        <span className="text-white/80 text-sm font-semibold">{item}</span>
+                                        <span className="text-white/80 text-xs sm:text-sm font-semibold break-words">{item}</span>
                                     </motion.div>
                                 ))}
                             </div>
 
                             {/* Pricing */}
                             <motion.div
-                                className="flex flex-wrap items-end gap-10 mb-10"
+                                className="flex flex-row flex-wrap items-end gap-6 md:gap-10 mb-10"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: 0.8 }}
