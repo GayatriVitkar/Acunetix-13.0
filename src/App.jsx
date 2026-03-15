@@ -28,15 +28,28 @@ function HomePage({ scrollToRefs, scrollToSection, isScrolled }) {
   const location = useLocation();
 
   useEffect(() => {
-    // If we're returning from an event page, scroll instantly to the events section
-    if (location.state?.scrollToEvents && scrollToRefs.eventRef.current) {
+    const sectionMap = {
+      hero: scrollToRefs.heroRef,
+      about: scrollToRefs.aboutRef,
+      events: scrollToRefs.eventRef,
+      schedule: scrollToRefs.scheduleRef,
+    };
+
+    const targetSection = location.state?.scrollTo;
+    const targetRef = sectionMap[targetSection];
+
+    // Legacy fallback used by older event detail links
+    const shouldScrollToEvents = location.state?.scrollToEvents;
+
+    if ((targetRef && targetRef.current) || (shouldScrollToEvents && scrollToRefs.eventRef.current)) {
       setTimeout(() => {
-        scrollToRefs.eventRef.current.scrollIntoView({ behavior: 'auto', block: 'start' });
+        const refToScroll = targetRef || scrollToRefs.eventRef;
+        refToScroll.current.scrollIntoView({ behavior: 'auto', block: 'start' });
         // Clear state so it doesn't fire again on re-renders
         window.history.replaceState({}, document.title);
       }, 50);
     }
-  }, [location.state, scrollToRefs.eventRef]);
+  }, [location.state, scrollToRefs]);
 
   return (
     <>
